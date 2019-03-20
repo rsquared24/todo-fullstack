@@ -1,0 +1,19 @@
+{
+  "name": "todos-fullstack-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf; tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "mongodb": "^3.1.13"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.22",
+    "typescript": "^3.3.4000"
+  }
+}

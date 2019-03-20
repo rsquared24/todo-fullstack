@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug core",
+      "runtimeVersion": "10.15.3",
+      "program": "${workspaceFolder}/core/dist/main.js",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/core/**/*.js"
+      ]
+    }
+  ]
+}
