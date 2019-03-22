@@ -1,44 +1,55 @@
 import Todo from "../model/todo";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
-const url: string = "mongodb://localhost:27017";
 const dbName: string = "todos-fullstack";
+const collectionName = "todos";
 
-// create
-async function createTodo(todo: Todo): Promise<Todo> { 
-
-  const client = await MongoClient.connect(url, { useNewUrlParser: true });
-  const collection = client.db(dbName).collection("todos");
-  const response = await collection.insertOne(todo);
-
-  return new Promise<Todo>(
-    (resolve, reject) => {
-      if(!response) reject("Fail");
-      resolve(todo);
-    })
-    .finally(
-      () => client.close()
-    );
+async function getClient(): Promise<MongoClient> {
+  const url: string = "mongodb://localhost:27017";
+  return MongoClient.connect(url, { useNewUrlParser: true });
 }
 
-// getAll
-async function getAllTodo(): Promise<Array<Todo>> {
-  const client = await MongoClient.connect(url, { useNewUrlParser: true });
-  const collection = client.db(dbName).collection("todos");
-  const response = await collection.find({});
+function mapResponse(data: any) : Todo {
+  return { 
+    id: data._id.toString(),
+    description: data.description, 
+    done: data.done
+  };
+}
 
-  return new Promise<Array<Todo>>(
-    (resolve, reject) => {
-      if(!response) reject("Fail");
-      
-      resolve(null);
-    })
-    .finally(
-      () => client.close()
-    );
+async function saveTodo(todo: Todo): Promise<Todo> {
+  const client = await getClient();
+  const todos = client.db(dbName).collection(collectionName);
+
+  try {
+    const response = await todos.update({ "_id": new ObjectId(todo.id)}, todo, { upsert: true });
+    return Promise.resolve(todo);
+  }
+  catch(ex) {
+    return Promise.reject(ex);
+  }
+  finally {
+    client.close();
+  }
+}
+
+async function getAllTodo(): Promise<Array<Todo>> {
+  const client = await getClient();
+  const todos = client.db(dbName).collection(collectionName);
+
+  try {
+    const response = await todos.find().toArray();  
+    return Promise.resolve(response.map(x => mapResponse(x)));
+  }
+  catch(ex) {
+    return Promise.reject(ex);
+  }
+  finally {
+    client.close();
+  }
 }
 
 export {
-  createTodo,
+  saveTodo,
   getAllTodo
 }
