@@ -5,15 +5,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "dist",
-    "types": [
-      "jest"
-    ]
   },
-  "include": [
-    "src/*",
-    "src/**/*"
-  ],
   "exclude": [
     "node_modules"
   ]

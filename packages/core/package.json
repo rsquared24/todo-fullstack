@@ -1,16 +1,17 @@
 {
-  "name": "todos-fullstack",
+  "name": "@todos-fullstack/core",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "lerna run build"
+    "build": "rm -rf ./dist; tsc"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "mongodb": "^3.1.13"
+  },
   "devDependencies": {
-    "@types/node": "^11.11.7",
-    "typescript": "^3.3.4000"
+    "@types/mongodb": "^3.1.22"
   }
 }
