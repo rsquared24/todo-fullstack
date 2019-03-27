@@ -1,11 +1,9 @@
 
-
 import express, { Request, Response } from "express";
-// import Todo from "../../core/src/model/todo";
-// import { saveTodo, getAllTodo } from "../../core/src/service/todo.service";
-
+import { Service, Model } from "@todos-fullstack/core";
 
 const app = express();
+const port = 11223;
 
 app.post("/something", function(req: any, res: Response) {
   // let todo: Todo = {
@@ -22,15 +20,18 @@ app.post("/something", function(req: any, res: Response) {
   //     res.status(500).send(err);
   //   }
   // )
+
 });
 
 app.get("/something-else", function(req: any, res: any){
-  // getAllTodo().then(
-  //   (resp) => {
-  //     res.send(resp);
-  //   }, 
-  //   (err) => { 
-  //     res.status(500).send(err);
-  //   }
-  // )
+  Service.TodoService.getAllTodo().then(
+    (resp) => {
+      res.send(resp);
+    }, 
+    (err) => { 
+      res.status(500).send(err);
+    }
+  )
 })
+
+app.listen(port, () => console.log(`App listening on port ${port}!`))

@@ -1,11 +1,4 @@
-// import { saveTodo, getAllTodo } from "./service/todo.service";
+import Service from "./service";
+import * as Model from "./model";
 
-
-export { default as TodoService } from "./service/todo.service";
-
-// export namespace Core {
-//   export class Service { 
-
-//     getAllTodo(): any
-//   }
-// }
+export { Service, Model }
