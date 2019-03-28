@@ -3,6 +3,11 @@ import { Service, Model } from "@todos-fullstack/core";
 
 const _todoService = Service.TodoService;
 
+export const random = (): void => {
+  console.log(_todoService);
+}
+
+
 export const saveTodo = (req: Request, res: Response): void => {
   let todo: Model.Todo = {
     id: "5c942b83adc3e295adea9e7c",
