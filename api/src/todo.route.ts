@@ -1,10 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Request, Response } from "express";
 import { Service, Model } from "@todos-fullstack/core";
 
-const router = Router();
 const _todoService = Service.TodoService;
 
-router.post("/",  (req: Request, res: Response) => {
+export const saveTodo = (req: Request, res: Response): void => {
   let todo: Model.Todo = {
     id: "5c942b83adc3e295adea9e7c",
     done: false,
@@ -19,9 +18,9 @@ router.post("/",  (req: Request, res: Response) => {
       res.status(500).send(err);
     }
   )
-})
+}
 
-router.get("/", (req: Request, res: Response) => {
+export const getAllTodo = (req: Request, res: Response): void => {
   _todoService.getAllTodo().then(
     (resp) => {
       res.send(resp);
@@ -30,6 +29,4 @@ router.get("/", (req: Request, res: Response) => {
       res.status(500).send(err);
     }
   )
-})
-
-export default router;
+}
