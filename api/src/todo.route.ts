@@ -1,20 +1,11 @@
-import { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { Service, Model } from "@todos-fullstack/core";
 
+const router = Router();
 const _todoService = Service.TodoService;
 
-export const random = (): void => {
-  console.log(_todoService);
-}
-
-
-export const saveTodo = (req: Request, res: Response): void => {
-  let todo: Model.Todo = {
-    id: "5c942b83adc3e295adea9e7c",
-    done: false,
-    description: `Something ${new Date().getMilliseconds()}`
-  }
-  
+const saveTodo = (id: string, done: boolean, description: string, res: Response) => {
+  let todo: Model.Todo = { id, done, description };
   _todoService.saveTodo(todo).then(
     (resp) => {
       res.send(resp);
@@ -25,7 +16,18 @@ export const saveTodo = (req: Request, res: Response): void => {
   )
 }
 
-export const getAllTodo = (req: Request, res: Response): void => {
+router.post("/", (req: Request, res: Response) => {
+  let body = req.body;
+  saveTodo(null, body.done, body.description, res);
+})
+
+router.post("/:id", (req: Request, res: Response) => {
+  let body = req.body;
+  let params = req.params;
+  saveTodo(params.id, body.done, body.description, res);
+})
+
+router.get("/", (req: Request, res: Response) => {
   _todoService.getAllTodo().then(
     (resp) => {
       res.send(resp);
@@ -34,4 +36,6 @@ export const getAllTodo = (req: Request, res: Response): void => {
       res.status(500).send(err);
     }
   )
-}
+})
+
+export default router;
