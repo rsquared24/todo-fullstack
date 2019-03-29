@@ -1,7 +1,7 @@
 
 import Express from "express";
 import BodyParser from "body-parser";
-import todoRoute from "./todo.route";
+import todoController from "./todo.controller";
 
 const app = Express();
 app.set("port", process.env.PORT || 11223);
@@ -9,6 +9,6 @@ app.set("port", process.env.PORT || 11223);
 app.use(BodyParser.json())
 app.use(BodyParser.urlencoded({ extended: true }));
 
-app.use("/todo", todoRoute)
+app.use("/todo", todoController)
 
 export default app;
