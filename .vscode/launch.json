@@ -15,6 +15,20 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug core all tests",
+      "runtimeVersion": "10.15.3",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "--runInBand",
+        "--config", 
+        "${workspaceRoot}/core/jest.config.json"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug api all tests",
       "runtimeVersion": "10.15.3",
       "program": "${workspaceFolder}/node_modules/.bin/jest",

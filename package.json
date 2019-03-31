@@ -12,7 +12,8 @@
     "test:api": "cd ./api; npm run test",
 
     "build:core": "cd ./core; npm run build",
-    "install:core": "cd ./core; npm install"
+    "install:core": "cd ./core; npm install",
+    "test:core": "cd ./core; npm run test"
   },
   "author": "",
   "license": "ISC",
