@@ -17,12 +17,6 @@ function mapResponse(data: any) : Todo {
   };
 }
 
-export function something() {
-  let y = 0;
-  debugger;
-  return 1;
-}
-
 async function saveTodo(todo: Todo): Promise<Todo> {
   const client = await getClient();
   const todos = client.db(dbName).collection(collectionName);
