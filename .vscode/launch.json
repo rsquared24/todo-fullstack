@@ -6,10 +6,10 @@
       "request": "launch",
       "name": "Debug core",
       "runtimeVersion": "10.15.3",
-      "program": "${workspaceFolder}/core/dist/main.js",
+      "program": "${workspaceFolder}/packages/core/dist/main.js",
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceFolder}/core/**/*.js"
+        "${workspaceFolder}/packages/core/**/*.js"
       ]
     },
     {
@@ -21,7 +21,7 @@
       "args": [
         "--runInBand",
         "--config", 
-        "${workspaceRoot}/api/jest.config.json",
+        "${workspaceRoot}/packages/pi/jest.config.json",
         "--coverage",
         "false"
       ],
@@ -38,7 +38,7 @@
         "${relativeFile}",
         "--runInBand",
         "--config", 
-        "${workspaceRoot}/api/jest.config.json",
+        "${workspaceRoot}/packages/api/jest.config.json",
         "--coverage",
         "false"
       ],
