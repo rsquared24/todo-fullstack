@@ -1,0 +1,19 @@
+{
+  "name": "@todos-fullstack/web",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf dist; tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^16.8.10",
+    "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "ts-loader": "^5.3.3",
+    "webpack": "^4.29.6"
+  }
+}

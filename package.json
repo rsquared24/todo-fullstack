@@ -6,14 +6,16 @@
   "scripts": {
     "bootstrap": "npm run install:api; npm run install:core",
     "build": "npm run build:api; npm run build:core",
-
     "build:api": "cd ./api; npm run build",
     "install:api": "cd ./api; npm install",
     "test:api": "cd ./api; npm run test",
-
     "build:core": "cd ./core; npm run build",
     "install:core": "cd ./core; npm install",
-    "test:core": "cd ./core; npm run test"
+    "test:core": "cd ./core; npm run test",
+    "install:web": "cd ./web; npm install",
+
+    "lerna": "lerna bootstrap",
+    "tsc": "lerna run tsc"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +25,7 @@
     "@types/node": "^11.11.7",
     "@types/react": "^16.8.8",
     "jest": "^24.5.0",
+    "lerna": "^3.13.1",
     "ts-jest": "^24.0.0",
     "typescript": "^3.3.4000"
   }

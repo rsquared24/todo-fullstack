@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
-    "build": "rm -rf ./dist; tsc"
+    "build": "rm -rf ./dist; tsc",
+    "tsc": "tsc"
   },
   "author": "",
   "license": "ISC",
