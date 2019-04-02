@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "bootstrap": "npm run install:api; npm run install:core",
-    "build": "npm run build:api; npm run build:core",
-    "build:api": "cd ./api; npm run build",
-    "install:api": "cd ./api; npm install",
-    "test:api": "cd ./api; npm run test",
-    "build:core": "cd ./core; npm run build",
-    "install:core": "cd ./core; npm install",
-    "test:core": "cd ./core; npm run test",
-    "install:web": "cd ./web; npm install"
+    "bootstrap": "yarn",
+    "build": "yarn wsrun --stages build",
+
+    "build:api": "yarn wsrun -p @todos-fullstack/api -c build",
+    "start:api": "yarn wsrun -p @todos-fullstack/api -c start",
+    "test:api": "yarn wsrun -p @todos-fullstack/api -c test",
+
+    "build:core": "yarn wsrun -p @todos-fullstack/core -c build"
+
+    
   },
   "author": "",
   "license": "ISC",
@@ -20,14 +21,13 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {
-    "wsrun": "^3.6.4"
-  },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/node": "^11.11.7",
-    "jest": "^24.5.0",
+    "jest": "^24.6.0",
     "ts-jest": "^24.0.0",
-    "typescript": "^3.3.4000"
+    "rimraf": "^2.6.3",
+    "typescript": "^3.3.4000",
+    "wsrun": "^3.6.4"
   }
 }

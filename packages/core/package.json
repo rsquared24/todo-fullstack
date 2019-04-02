@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "build": "rm -rf ./dist; tsc",
-    "tsc": "tsc"
+    "build": "rimraf dist; tsc"
   },
   "author": "",
   "license": "ISC",

@@ -2,9 +2,9 @@
   "name": "@todos-fullstack/web",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf dist; tsc"
+    "build": "rimraf dist; tsc"
   },
   "author": "",
   "license": "ISC",
