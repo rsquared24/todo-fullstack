@@ -1,9 +1,9 @@
 import { Service, Model } from "./";
 
 let todo: Model.Todo = {
-  id: "5c942b83adc3e295adea9e7c",
+  id: "5cbfc02dd3c58ae982a9d475",
   done: false,
-  description: `Something ${new Date().getMilliseconds()}`
+  description: `newbie`
 }
 
 Service.TodoService.saveTodo(todo).then(
