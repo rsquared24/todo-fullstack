@@ -21,7 +21,7 @@
       "args": [
         "--runInBand",
         "--config", 
-        "${workspaceRoot}/packages/pi/jest.config.json",
+        "${workspaceRoot}/packages/api/jest.config.json",
         "--coverage",
         "false"
       ],

@@ -9,7 +9,9 @@
     "build:api": "yarn wsrun -p @todos-fullstack/api -c build",
     "start:api": "yarn wsrun -p @todos-fullstack/api -c start",
     "test:api": "yarn wsrun -p @todos-fullstack/api -c test",
-    "build:core": "yarn wsrun -p @todos-fullstack/core -c build"
+    "build:core": "yarn wsrun -p @todos-fullstack/core -c build",
+    "build:web": "yarn wsrun -p @todos-fullstack/web -c build",
+    "start:web": "yarn wsrun -p @todos-fullstack/web -c start"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +23,8 @@
     "@types/jest": "^24.0.11",
     "@types/node": "^11.11.7",
     "jest": "^24.6.0",
-    "ts-jest": "^24.0.0",
     "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.0",
     "typescript": "^3.3.4000",
     "wsrun": "^3.6.4"
   }
