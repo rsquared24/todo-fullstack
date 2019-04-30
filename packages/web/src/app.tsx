@@ -1,9 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { MyComponent } from "./main";
+import { TodoInputComponent } from "./todo-input.component";
+
+const App = () => {
+  return (
+    <div>
+      <TodoInputComponent />
+    </div>
+  )
+}
 
 ReactDOM.render(
-  <MyComponent message="Hello World" />,
+  <App />,
   document.getElementById("app")
 )

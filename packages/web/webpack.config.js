@@ -7,6 +7,7 @@ module.exports = {
   output: {
     filename: "./js/[name].js"
   },
+  devtool: "source-map",
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"]
   },
