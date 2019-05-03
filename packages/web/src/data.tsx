@@ -1,54 +1,49 @@
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch } from "react";
 import axios from "axios";
 
-export const useAsyncRequest = <T extends {}>(request: any, dispatch: Dispatch<any>) => {
-  const [params, setParams] = useState({} as T);
-
-  useEffect(() => {
-    request(params)(dispatch);
-  }, [params])
-
-  return setParams;
+/**
+ * Insert Todo command 
+ */
+enum InsertTodoType {
+  Request,
+  RequestSuccess,
+  RequestFail
 }
 
-export interface InsertTodoParams {
-  description: string
-}
+export const insertTodoRequest = (description: string) => (dispatch: Dispatch<any>) => {
+  if(!description) return;
 
-export const insertTodoRequest = (params: InsertTodoParams) => (dispatch: Dispatch<any>) => {
-  if(!params.description) return;
-
-  dispatch({ type: "request" });
+  dispatch({ type: InsertTodoType.Request });
 
   let todo = {
-    description: params.description,
+    description,
     done: false
   };
 
   axios.post("http://localhost:11223/todo", todo).then(
     (response) => {
-      dispatch({ type: "request_success", data: response.data })
+      dispatch({ type: InsertTodoType.RequestSuccess, data: response.data });
     },
     () => {
-      dispatch({ type: "request_fail" })
+      dispatch({ type: InsertTodoType.RequestFail })
     }
   );
 }
 
 export const insertTodoReducer = (state: any, action: any) => {
   switch(action.type) {
-    case "request":
+    case InsertTodoType.Request:
       return {
         ...state,
         isSaving: true
       }
-    case "request_success":
+    case InsertTodoType.RequestSuccess:
       return {
         ...state,
         isSaving: false,
         todo: action.data
       };
-    case "request_fail":
+    case InsertTodoType.RequestFail:
       return {
         ...state,
         isSaving: false
@@ -57,3 +52,99 @@ export const insertTodoReducer = (state: any, action: any) => {
       return state;
   }
 }
+
+/**
+ * Update Todo command 
+ */
+enum UpdateTodoType {
+  Request,
+  RequestSuccess,
+  RequestFail
+}
+
+export const updateTodoRequest = (id: string, description: string, done: boolean) => (dispatch: Dispatch<any>) => {
+  dispatch({ type: UpdateTodoType.Request });
+
+  let todo = {
+    description,
+    done: false
+  };
+
+  axios.post(`http://localhost;11223/todo/${id}`, todo).then(
+    (response) => {
+      dispatch({ type: UpdateTodoType.RequestSuccess, data: response.data })
+    },
+    () => {
+      dispatch({ type: UpdateTodoType.RequestFail })
+    }
+  );
+}
+
+export const updateTodoReducer = (state: any, action: any) => {
+  switch(action.type) {
+    case UpdateTodoType.Request:
+      return { 
+        ...state, 
+        isLoading: true 
+      };
+    case UpdateTodoType.RequestSuccess:
+      return {
+        ...state,
+        isLoading: false,
+        todos: action.data
+      };
+    case UpdateTodoType.RequestFail:
+      return {
+        ...state,
+        isLoading: false
+      }
+    default:
+      return state;
+  }
+}
+
+/**
+ * GetAll Todo query
+ */
+enum GetAllTodoType {
+  Request,
+  RequestSuccess,
+  RequestFail
+}
+
+export const getAllTodoRequest = () => (dispatch: Dispatch<any>) => { 
+  dispatch({ type: GetAllTodoType.Request })
+
+  axios.get("http://localhost:11223/todo").then(
+    (response) => {
+      dispatch({ type: InsertTodoType.RequestSuccess, data: response.data })
+    },
+    () => {
+      dispatch({ type: InsertTodoType.RequestFail })
+    }
+  )
+}
+
+export const getAllTodoReducer = (state: any, action: any) => {
+  switch(action.type) {
+    case GetAllTodoType.Request:
+      return { 
+        ...state, 
+        isLoading: true 
+      };
+    case GetAllTodoType.RequestSuccess:
+      return {
+        ...state,
+        isLoading: false,
+        todos: action.data
+      };
+    case GetAllTodoType.RequestFail:
+      return {
+        ...state,
+        isLoading: false
+      }
+    default:
+      return state;
+  }
+}
+
