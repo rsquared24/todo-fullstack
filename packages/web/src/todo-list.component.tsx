@@ -9,13 +9,8 @@ export const TodoListComponent = (props: TodoListComponentProps) => {
   if(!props.todos) return null;
 
   return (
-    <>
+    <ul className="todo-list">
       {props.todos.map((value, index) => <TodoItemComponent key={index} todo={value} /> )}
-
-      <h2> TODOLIST - COMPONENT </h2>
-      <pre>
-        {JSON.stringify(props.todos, null, 2)}
-      </pre>
-    </>
+    </ul>
   )
 }

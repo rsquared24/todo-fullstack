@@ -1,7 +1,6 @@
 import React, { useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
-import axios from "axios";
-
+import Axios from "axios";
 import { AppContext, appReducer, AppAction } from "./context";
 import { TodoInputComponent } from "./todo-input.component";
 import { TodoListComponent } from "./todo-list.component";
@@ -12,7 +11,7 @@ const App = () => {
   useEffect(() => {
     appDispatch({ type: AppAction.RequestTodos })
 
-    axios.get("http://localhost:11223/todo").then(
+    Axios.get("http://localhost:11223/todo").then(
       (response) => {
         appDispatch({ type: AppAction.RequestTodosSuccess, response: response.data })
       },
@@ -25,8 +24,13 @@ const App = () => {
 
   return (
     <AppContext.Provider value={[appState, appDispatch]}> 
-      <TodoInputComponent />
-      <TodoListComponent todos={appState.todos} />
+      <header className="header">
+        <h1> todos </h1>
+        <TodoInputComponent />
+      </header>
+      <section className="main">
+        <TodoListComponent todos={appState.todos} />
+      </section>
     </AppContext.Provider>
   )
 }

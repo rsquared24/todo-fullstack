@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import axios from "axios";
+import Axios from "axios";
 
 /**
  * Insert Todo command 
@@ -20,7 +20,7 @@ export const insertTodoRequest = (description: string) => (dispatch: Dispatch<an
     done: false
   };
 
-  axios.post("http://localhost:11223/todo", todo).then(
+  Axios.post("http://localhost:11223/todo", todo).then(
     (response) => {
       dispatch({ type: InsertTodoType.RequestSuccess, data: response.data });
     },
@@ -70,7 +70,7 @@ export const updateTodoRequest = (id: string, description: string, done: boolean
     done: false
   };
 
-  axios.post(`http://localhost;11223/todo/${id}`, todo).then(
+  Axios.post(`http://localhost;11223/todo/${id}`, todo).then(
     (response) => {
       dispatch({ type: UpdateTodoType.RequestSuccess, data: response.data })
     },
@@ -115,7 +115,7 @@ enum GetAllTodoType {
 export const getAllTodoRequest = () => (dispatch: Dispatch<any>) => { 
   dispatch({ type: GetAllTodoType.Request })
 
-  axios.get("http://localhost:11223/todo").then(
+  Axios.get("http://localhost:11223/todo").then(
     (response) => {
       dispatch({ type: InsertTodoType.RequestSuccess, data: response.data })
     },
