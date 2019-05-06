@@ -8,6 +8,8 @@ export interface TodoItemComponentProps {
 }
 
 export const TodoItemComponent = (props: TodoItemComponentProps) => {
+  if(!props.todo) return null;
+
   const [ description, setDescription ] = useState(props.todo.description);
   const [ isEditing, setIsEditing ] = useState(false);
   const [ appState, appDispatch ] = useContext(AppContext);
@@ -31,19 +33,23 @@ export const TodoItemComponent = (props: TodoItemComponentProps) => {
     }
   }
 
+  const handleCheckboxChange = (e: any) => {  
+    updateTodo({ ...props.todo, done: e.currentTarget.checked });
+  }
+
+  const handleDeleteClick = () => {
+    deleteTodo(props.todo.id);
+  }
+
   const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
     if(!description) {
-      console.log(1);
+      deleteTodo(props.todo.id);
     }
     else {
       updateTodo({ ...props.todo, description });
     }
   }
-
-  const handleCheckboxChange = (e: any) => {  
-    updateTodo({ ...props.todo, done: e.currentTarget.checked });
-  }
-
+  
   const updateTodo = (todo: any) => {
     Axios.post(`http://localhost:11223/todo/${props.todo.id}`, { ...props.todo, ...todo })
       .then(
@@ -56,6 +62,25 @@ export const TodoItemComponent = (props: TodoItemComponentProps) => {
       )
       .finally(() => {
         setIsEditing(false)
+      });
+  }
+
+  const deleteTodo = (id: string) => {
+    let deleted: boolean = false;
+    Axios.delete(`http://localhost:11223/todo/${id}`)
+      .then(
+        (response: AxiosResponse) => {
+          appDispatch({ type: AppAction.RemoveTodo, todo: props.todo });
+          deleted = response.data;
+        },
+        (error: AxiosError) => {
+          console.log(error);
+        }
+      )
+      .finally(() => {
+        // we check this because if has been deleted, we unmount the component and there is no state to set
+        if(deleted) return;
+        setIsEditing(false);
       });
   }
 
@@ -76,7 +101,10 @@ export const TodoItemComponent = (props: TodoItemComponentProps) => {
           onChange={handleCheckboxChange}
         />
         <label>{props.todo.description}</label>
-        <button className="destroy"></button>
+        <button 
+          className="destroy"
+          onClick={handleDeleteClick}
+        />
       </div>
       <input 
         className="edit"

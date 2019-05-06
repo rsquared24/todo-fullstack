@@ -6,7 +6,16 @@ let todo: Model.Todo = {
   description: `newbie`
 }
 
-Service.TodoService.saveTodo(todo).then(
+// Service.TodoService.saveTodo(todo).then(
+//   (resp) => {
+//     console.log(resp);
+//   }, 
+//   (err) => { 
+//     console.log(err)
+//   }
+// )
+
+Service.TodoService.deleteTodo("5ccf8c78a27bcd865f60a104").then(
   (resp) => {
     console.log(resp);
   }, 

@@ -27,6 +27,18 @@ router.post("/:id", (req: Request, res: Response) => {
   saveTodo(params.id, body.done, body.description, res);
 })
 
+router.delete("/:id", (req: Request, res: Response) => {
+  let params = req.params;
+  _todoService.deleteTodo(params.id).then(
+    (resp) => {
+      res.send(resp);
+    },
+    (err) => {
+      res.status(500).send(err);
+    }
+  )
+})
+
 router.get("/", (req: Request, res: Response) => {
   _todoService.getAllTodo().then(
     (resp) => {

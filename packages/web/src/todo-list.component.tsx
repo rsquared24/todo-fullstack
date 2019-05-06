@@ -10,7 +10,7 @@ export const TodoListComponent = (props: TodoListComponentProps) => {
 
   return (
     <ul className="todo-list">
-      {props.todos.map((value, index) => <TodoItemComponent key={index} todo={value} /> )}
+      {props.todos.map((value: any) => <TodoItemComponent key={value.id} todo={value} /> )}
     </ul>
   )
 }

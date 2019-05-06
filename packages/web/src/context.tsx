@@ -44,9 +44,13 @@ export const appReducer = (state: any, action: AppReducerAction) => {
         todos: state.todos.map((todo: any) => (todo.id === action.todo.id) ? { ...todo, ...action.todo } : todo)
       };
     case AppAction.RemoveTodo:
+      let todos = [...state.todos];
+      let idx = todos.findIndex((todo) => todo.id === action.todo.id);
+      todos.splice(idx, 1);
+      
       return {
         ...state,
-        todos: state.todos.map((todo: any) => (todo.id === action.todo.id) ? null : todo)
+        todos: todos
       };
     default:
       return state;

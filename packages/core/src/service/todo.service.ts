@@ -43,7 +43,7 @@ async function updateTodo(collection: Collection<any>, todo: Todo) : Promise<str
   return Promise.resolve(todo.id);
 }
 
-async function saveTodo(todo: Todo): Promise<Todo> {
+export async function saveTodo(todo: Todo): Promise<Todo> {
   const client = await getClient();
   const todos = client.db(dbName).collection(collectionName);
 
@@ -64,7 +64,26 @@ async function saveTodo(todo: Todo): Promise<Todo> {
   }
 }
 
-async function getAllTodo(): Promise<Array<Todo>> {
+export async function deleteTodo(id: string): Promise<boolean> {
+  const client = await getClient();
+  const todos = client.db(dbName).collection(collectionName);
+
+  try {
+    const response = await todos.deleteOne({ "_id": new ObjectId(id) });
+
+    if(response.deletedCount <= 0) throw "Todo did not delete";
+    
+    return Promise.resolve(true);
+  }
+  catch(ex) {
+    return Promise.reject(ex);
+  }
+  finally { 
+    client.close();
+  }
+}
+
+export async function getAllTodo(): Promise<Array<Todo>> {
   const client = await getClient();
   const todos = client.db(dbName).collection(collectionName);
 
@@ -78,9 +97,4 @@ async function getAllTodo(): Promise<Array<Todo>> {
   finally {
     client.close();
   }
-}
-
-export {
-  saveTodo,
-  getAllTodo
 }
