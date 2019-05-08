@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import Axios, { AxiosPromise, AxiosResponse, AxiosError } from "axios";
+import Axios, { AxiosResponse, AxiosError } from "axios";
 import { AppContext, AppAction } from "./context";
 
-interface TodoInputComponentProps {
+interface HeaderComponentProps {
 }
 
-export const TodoInputComponent = (props: TodoInputComponentProps) => {
+export const HeaderComponent = (props: HeaderComponentProps) => {
   const [appState, appDispatch] = useContext(AppContext);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -28,11 +28,14 @@ export const TodoInputComponent = (props: TodoInputComponentProps) => {
   }
 
   return (
-    <input 
-      type="text" 
-      className="new-todo"
-      placeholder="What needs to be done?"
-      onKeyDown={handleKeyDown} 
-    />
+    <header className="header">
+      <h1> todos </h1>
+      <input 
+        type="text" 
+        className="new-todo"
+        placeholder="What needs to be done?"
+        onKeyDown={handleKeyDown} 
+      />
+    </header>
   )
 }

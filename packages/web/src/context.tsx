@@ -6,13 +6,16 @@ export enum AppAction {
   RequestTodosFail,
   AddTodo,
   UpdateTodo,
-  RemoveTodo
+  RemoveTodo,
+  FilterTodos,
+  RemoveCompletedTodos
 }
 
 export interface AppReducerAction {
   type: AppAction,
   response?: any,
-  todo?: any
+  todo?: any,
+  filter?: string
 }
 
 export const appReducer = (state: any, action: AppReducerAction) => {
@@ -32,7 +35,7 @@ export const appReducer = (state: any, action: AppReducerAction) => {
       return {
         ...state,
         isLoading: false
-      }    
+      };
     case AppAction.AddTodo:
       return {
         ...state,
@@ -44,13 +47,26 @@ export const appReducer = (state: any, action: AppReducerAction) => {
         todos: state.todos.map((todo: any) => (todo.id === action.todo.id) ? { ...todo, ...action.todo } : todo)
       };
     case AppAction.RemoveTodo:
-      let todos = [...state.todos];
-      let idx = todos.findIndex((todo) => todo.id === action.todo.id);
-      todos.splice(idx, 1);
-      
+      let remainingTodos = [...state.todos];
+      let idx = remainingTodos.findIndex((todo) => todo.id === action.todo.id);
+      remainingTodos.splice(idx, 1);
+
       return {
         ...state,
-        todos: todos
+        todos: remainingTodos
+      };
+    case AppAction.FilterTodos: 
+      let filteredTodos: Array<any> = [ ...state.todos];
+      let filters: any = { "all": null, "completed": true, "active": false };
+      let filter = filters[action.filter];
+
+      if(filter) {
+        filteredTodos = filteredTodos.map((todo) => todo.done === filter);
+      };
+
+      return {
+        ...state,
+        filteredTodos
       };
     default:
       return state;

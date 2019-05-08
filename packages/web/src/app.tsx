@@ -1,16 +1,34 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Axios from "axios";
 import { AppContext, appReducer, AppAction } from "./context";
-import { TodoInputComponent } from "./todo-input.component";
+
+import { HeaderComponent } from "./header.component";
+import { FooterComponent } from "./footer.component";
+
 import { TodoListComponent } from "./todo-list.component";
 
-const App = () => {
-  const [ appState, appDispatch ] = useReducer(appReducer, { todos: null, isLoading: false });
-  
-  useEffect(() => {
-    appDispatch({ type: AppAction.RequestTodos })
+const useFilteredTodos = (todos: any, filter: string) => {
+  const [ filteredTodos, setFilteredTodos ] = useState(null);
+  const kvp: any = { "active": false, "completed": true };
 
+  useEffect(() => {
+    // filter the todos
+    (kvp[filter] === undefined) ?
+      setFilteredTodos(todos) :
+      setFilteredTodos([...todos.filter((todo: any) => todo.done === kvp[filter])]);
+  }, [todos, filter]);
+
+  return filteredTodos;
+}
+
+const App = () => {
+  const [ appState, appDispatch ] = useReducer(appReducer, { todos: [], isLoading: false });
+  const [ filter, setFilter ] = useState(null);
+  const filteredTodos = useFilteredTodos(appState.todos, filter);
+
+  useEffect(() => {
+    appDispatch({ type: AppAction.RequestTodos });
     Axios.get("http://localhost:11223/todo").then(
       (response) => {
         appDispatch({ type: AppAction.RequestTodosSuccess, response: response.data })
@@ -19,18 +37,19 @@ const App = () => {
         appDispatch({ type: AppAction.RequestTodosFail })
       }
     )
-
   }, []);
 
+  const handleFilterClick = (filter?: string) => {
+    setFilter(filter);
+  }
+
   return (
-    <AppContext.Provider value={[appState, appDispatch]}> 
-      <header className="header">
-        <h1> todos </h1>
-        <TodoInputComponent />
-      </header>
+    <AppContext.Provider value={[appState, appDispatch]}>
+      <HeaderComponent />
       <section className="main">
-        <TodoListComponent todos={appState.todos} />
+        <TodoListComponent todos={filteredTodos} />
       </section>
+      <FooterComponent onFilterClick={handleFilterClick} />
     </AppContext.Provider>
   )
 }

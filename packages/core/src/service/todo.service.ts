@@ -43,6 +43,12 @@ async function updateTodo(collection: Collection<any>, todo: Todo) : Promise<str
   return Promise.resolve(todo.id);
 }
 
+export async function batchUpdate() : Promise<Todo> {
+
+  
+  return null;
+}
+
 export async function saveTodo(todo: Todo): Promise<Todo> {
   const client = await getClient();
   const todos = client.db(dbName).collection(collectionName);
