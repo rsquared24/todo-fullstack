@@ -2,10 +2,8 @@ import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Axios from "axios";
 import { AppContext, appReducer, AppAction } from "./context";
-
 import { HeaderComponent } from "./header.component";
 import { FooterComponent } from "./footer.component";
-
 import { TodoListComponent } from "./todo-list.component";
 
 const useFilteredTodos = (todos: any, filter: string) => {
@@ -39,17 +37,13 @@ const App = () => {
     )
   }, []);
 
-  const handleFilterClick = (filter?: string) => {
-    setFilter(filter);
-  }
-
   return (
     <AppContext.Provider value={[appState, appDispatch]}>
       <HeaderComponent />
       <section className="main">
         <TodoListComponent todos={filteredTodos} />
       </section>
-      <FooterComponent onFilterClick={handleFilterClick} />
+      <FooterComponent onFilterClick={setFilter} />
     </AppContext.Provider>
   )
 }

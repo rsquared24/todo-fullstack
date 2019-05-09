@@ -18,6 +18,12 @@ export interface AppReducerAction {
   filter?: string
 }
 
+export interface AppState {
+  isLoading?: boolean,
+  todos?: Array<any>,
+  filteredTodos?: Array<any>,
+}
+
 export const appReducer = (state: any, action: AppReducerAction) => {
   switch(action.type) {
     case AppAction.RequestTodos:

@@ -61,7 +61,8 @@ export const TodoItemComponent = (props: TodoItemComponentProps) => {
         },
       )
       .finally(() => {
-        setIsEditing(false)
+        if(!isEditing) return;
+        setIsEditing(false);
       });
   }
 

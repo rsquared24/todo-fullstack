@@ -25,7 +25,7 @@ export const FooterComponent = (props: FooterComponentProps) => {
 
   return (
     <footer className="footer">
-      <span className="todo-count"> {`${remainingCount} ${remainingCount === 0 ? "items" : "item"} left`} </span>
+      <span className="todo-count"> {`${remainingCount} ${remainingCount === 0 ? "item" : "items"} left`} </span>
       <ul className="filters">
         <li> 
           <a href="#" onClick={() => { props.onFilterClick(null) }}> All </a> 
