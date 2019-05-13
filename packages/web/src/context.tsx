@@ -21,6 +21,7 @@ export interface AppReducerAction {
 export interface AppState {
   isLoading?: boolean,
   todos?: Array<any>,
+  filter?: string,
   filteredTodos?: Array<any>,
 }
 
