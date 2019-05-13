@@ -1,31 +1,30 @@
 import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { AppContext, appReducer, AppAction } from "./context";
+import { AppContext, appReducer, AppAction } from "./store";
 import { HeaderComponent } from "./header.component";
 import { FooterComponent } from "./footer.component";
 import { TodoListComponent } from "./todo-list.component";
-import { useGetTodos } from "./hooks";
+import { useGetTodos } from "./api";
 
-const useFilteredTodos = (todos: any, filter: string) => {
+const useFilteredTodos = (todos: any) => {
+  const [ filter, setFilter ] = useState(null);
   const [ filteredTodos, setFilteredTodos ] = useState(null);
   const kvp: any = { "active": false, "completed": true };
 
   useEffect(() => {
-    // filter the todos
     (kvp[filter] === undefined) ?
       setFilteredTodos(todos) :
       setFilteredTodos([...todos.filter((todo: any) => todo.done === kvp[filter])]);
   }, [todos, filter]);
 
-  return filteredTodos;
+  return [ filteredTodos, setFilter ];
 }
 
 const App = () => {
   const [ appState, appDispatch ] = useReducer(appReducer, { todos: [], isLoading: false });
-  const [ filter, setFilter ] = useState(null);
-  const filteredTodos = useFilteredTodos(appState.todos, filter);
+  const [ filteredTodos, setFilter ] = useFilteredTodos(appState.todos);
   const getTodosResponse = useGetTodos();
-  
+
   useEffect(() => {
     if(!getTodosResponse || getTodosResponse.pending) return;
 

@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "./context";
+import { AppContext } from "./store";
 
 const useRemainingCount = (todos: any) => {
   const [ remainingCount, setRemainingCount ] = useState(null);

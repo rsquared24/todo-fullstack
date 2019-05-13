@@ -47,6 +47,29 @@ export const useDeleteTodo = () => {
   return [ response, setId ];
 }
 
+export const useBatchUpdateTodo = () => {
+  const [ params, setParams ] = useState(null);
+  const [ response, setResponse ] = useState(null);
+
+  useEffect(() => {
+    if(!params) return;
+
+    setResponse({ pending: true, completed: false, error: null, data: null });
+
+    Axios.post(`http://localhost:11223/todo/batch-update`, params)
+      .then(
+        (resp: AxiosResponse) => {
+          setResponse({ pending: false, completed: true, error: null, data: resp.data });
+        },
+        (error: AxiosError) => {
+          setResponse({ pending: false, completed: true, error: error.message, data: null });
+        }
+      )
+  }, [params]);
+
+  return [ response, setParams ];
+}
+
 export const useGetTodos = () => {
   const [ response, setResponse ] = useState(null);
 

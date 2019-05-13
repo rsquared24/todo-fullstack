@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import classNames from "classnames";
-import { AppContext, AppAction } from "./context";
-import { useSaveTodo, useDeleteTodo } from "./hooks";
+import { AppContext, AppAction } from "./store";
+import { useSaveTodo, useDeleteTodo } from "./api";
 
 export interface TodoItemComponentProps { 
   todo: any
