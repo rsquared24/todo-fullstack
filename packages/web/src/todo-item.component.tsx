@@ -58,7 +58,7 @@ export const TodoItemComponent = (props: TodoItemComponentProps) => {
     }
   }
 
-  const handleCheckboxChange = (e: any) => {  
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {  
     setTodo({...props.todo, done: e.currentTarget.checked });
   }
 

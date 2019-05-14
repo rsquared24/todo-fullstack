@@ -47,16 +47,16 @@ export const useDeleteTodo = () => {
   return [ response, setId ];
 }
 
-export const useBatchUpdateTodo = () => {
-  const [ params, setParams ] = useState(null);
+export const useMarkAsIncomplete = () => {
+  const [ ids, setIds ] = useState(null);
   const [ response, setResponse ] = useState(null);
 
   useEffect(() => {
-    if(!params) return;
+    if(!ids) return;
 
     setResponse({ pending: true, completed: false, error: null, data: null });
 
-    Axios.post(`http://localhost:11223/todo/batch-update`, params)
+    Axios.post(`http://localhost:11223/todo/mark-as-incomplete`, { ids })
       .then(
         (resp: AxiosResponse) => {
           setResponse({ pending: false, completed: true, error: null, data: resp.data });
@@ -65,9 +65,55 @@ export const useBatchUpdateTodo = () => {
           setResponse({ pending: false, completed: true, error: error.message, data: null });
         }
       )
-  }, [params]);
+  }, [ids]);
 
-  return [ response, setParams ];
+  return [ response, setIds ];
+}
+
+export const useMarkAsComplete = () => {
+  const [ ids, setIds ] = useState(null);
+  const [ response, setResponse ] = useState(null);
+
+  useEffect(() => {
+    if(!ids) return;
+
+    setResponse({ pending: true, completed: false, error: null, data: null });
+
+    Axios.post(`http://localhost:11223/todo/mark-as-complete`, { ids })
+      .then(
+        (resp: AxiosResponse) => {
+          setResponse({ pending: false, completed: true, error: null, data: resp.data });
+        },
+        (error: AxiosError) => {
+          setResponse({ pending: false, completed: true, error: error.message, data: null });
+        }
+      )
+  }, [ids]);
+
+  return [ response, setIds ];
+}
+
+export const useClearCompleted = () => {
+  const [ ids, setIds ] = useState(null);
+  const [ response, setResponse ] = useState(null);
+
+  useEffect(() => {
+    if(!ids) return;
+
+    setResponse({ pending: true, completed: false, error: null, data: null });
+
+    Axios.post(`http://localhost:11223/todo/clear-completed`, { ids })
+      .then(
+        (resp: AxiosResponse) => {
+          setResponse({ pending: false, completed: true, error: null, data: resp.data });
+        },
+        (error: AxiosError) => {
+          setResponse({ pending: false, completed: true, error: error.message, data: null });
+        }
+      )
+  }, [ids]);
+
+  return [ response, setIds ];
 }
 
 export const useGetTodos = () => {

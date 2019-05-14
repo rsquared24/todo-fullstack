@@ -1,20 +1,20 @@
 import { createContext } from "react";
 
 export enum AppAction {
-  RequestTodos,
   RequestTodosSuccess,
-  RequestTodosFail,
   AddTodo,
   UpdateTodo,
   RemoveTodo,
-  FilterTodos,
-  RemoveCompletedTodos
+  ClearComplete,
+  MarkAsComplete,
+  MarkAsIncomplete
 }
 
 export interface AppReducerAction {
   type: AppAction,
   response?: any,
   todo?: any,
+  todos?: Array<any>,
   filter?: string
 }
 
@@ -27,21 +27,11 @@ export interface AppState {
 
 export const appReducer = (state: any, action: AppReducerAction) => {
   switch(action.type) {
-    case AppAction.RequestTodos:
-      return {
-        ...state,
-        isLoading: true
-      };
     case AppAction.RequestTodosSuccess:
       return {
         ...state,
         isLoading: false,
         todos: action.response
-      };
-    case AppAction.RequestTodosFail:
-      return {
-        ...state,
-        isLoading: false
       };
     case AppAction.AddTodo:
       return {
@@ -62,19 +52,21 @@ export const appReducer = (state: any, action: AppReducerAction) => {
         ...state,
         todos: remainingTodos
       };
-    case AppAction.FilterTodos: 
-      let filteredTodos: Array<any> = [ ...state.todos];
-      let filters: any = { "all": null, "completed": true, "active": false };
-      let filter = filters[action.filter];
-
-      if(filter) {
-        filteredTodos = filteredTodos.map((todo) => todo.done === filter);
-      };
-
+    case AppAction.ClearComplete: 
       return {
         ...state,
-        filteredTodos
-      };
+        todos: state.todos.filter((todo: any) => !todo.done)
+      }
+    case AppAction.MarkAsComplete: 
+      return {
+        ...state,
+        todos: state.todos.map((todo: any) => { return { ...todo, done: true }})
+      }
+    case AppAction.MarkAsIncomplete: 
+      return {
+        ...state,
+        todos: state.todos.map((todo: any) => { return { ...todo, done: false }})
+      }
     default:
       return state;
   }

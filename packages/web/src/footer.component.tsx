@@ -1,6 +1,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "./store";
+import { AppContext, AppAction } from "./store";
+import { useClearCompleted } from "./api";
 
 const useRemainingCount = (todos: any) => {
   const [ remainingCount, setRemainingCount ] = useState(null);
@@ -19,9 +20,23 @@ interface FooterComponentProps {
 
 export const FooterComponent = (props: FooterComponentProps) => {
   const [ appState, appDispatch ] = useContext(AppContext);
+  const [ clearCompletedResponse, setIds ] = useClearCompleted();
   const remainingCount = useRemainingCount(appState.todos);
   
+  useEffect(() => {
+    if(!clearCompletedResponse || clearCompletedResponse.pending) return;
+
+    if(clearCompletedResponse.completed && clearCompletedResponse.data) {
+      appDispatch({ type: AppAction.ClearComplete });
+    }
+  }, [clearCompletedResponse]);
+
   if(!appState.todos || appState.todos.length === 0) return null;
+
+  const handleClearCompletedClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    let ids = appState.todos.filter((todo: any) => todo.done === true).map((todo: any) => todo.id);
+    setIds(ids);
+  }
 
   return (
     <footer className="footer">
@@ -37,7 +52,7 @@ export const FooterComponent = (props: FooterComponentProps) => {
           <a href="#/completed" onClick={() => { props.onFilterClick("completed") }}> Completed  </a> 
         </li>
       </ul>
-      <button className="clear-completed"> Clear completed </button>
+      <button className="clear-completed" onClick={handleClearCompletedClick}> Clear completed </button>
     </footer>
   )
 }
