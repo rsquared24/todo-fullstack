@@ -2,10 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { AppContext, AppAction } from "./store";
 import { useSaveTodo } from "./api";
 
-interface HeaderComponentProps {
-}
-
-export const HeaderComponent = (props: HeaderComponentProps) => {
+export const HeaderComponent = () => {
   const [ appState, appDispatch ] = useContext(AppContext);
   const [ saveTodoResponse, setTodo ] = useSaveTodo();
 

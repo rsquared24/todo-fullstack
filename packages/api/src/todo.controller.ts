@@ -63,7 +63,7 @@ router.post("/mark-as-complete", (req: Request, res: Response) => {
   markTodos(ids, true, res);
 })
 
-router.post("/mask-as-incomplete", (req: Request, res: Response) => {
+router.post("/mark-as-incomplete", (req: Request, res: Response) => {
   let body = req.body;
   let ids = body.ids;
   markTodos(ids, false, res);

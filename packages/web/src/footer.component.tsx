@@ -7,7 +7,7 @@ const useRemainingCount = (todos: any) => {
   const [ remainingCount, setRemainingCount ] = useState(null);
 
   useEffect(() => {
-    let count = [...todos.filter((todo: any) => !todo.done)].length;
+    let count = todos.filter((todo: any) => !todo.done).length;
     setRemainingCount(count);
   }, [todos])
 
