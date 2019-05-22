@@ -47,16 +47,20 @@ export const useDeleteTodo = () => {
   return [ response, setId ];
 }
 
-export const useMarkAsIncomplete = () => {
-  const [ ids, setIds ] = useState(null);
+export const useMarkTodos = (todos: any) => {
+  const [ isCompleted, setIsCompleted ] = useState(null);
   const [ response, setResponse ] = useState(null);
 
-  useEffect(() => {
-    if(!ids) return;
+  useEffect(() => { 
+    if(isCompleted === null) return;
+
+    let ids = todos.filter((todo: any) => todo.done === !isCompleted).map((todo: any) => todo.id)
+
+    if(!ids || ids.length <= 0) return;
 
     setResponse({ pending: true, completed: false, error: null, data: null });
 
-    Axios.post(`http://localhost:11223/todo/mark-as-incomplete`, { ids })
+    Axios.post(`http://localhost:11223/todo/mark-as-${isCompleted ? "complete" : "incomplete"}`, { ids })
       .then(
         (resp: AxiosResponse) => {
           setResponse({ pending: false, completed: true, error: null, data: resp.data });
@@ -65,32 +69,9 @@ export const useMarkAsIncomplete = () => {
           setResponse({ pending: false, completed: true, error: error.message, data: null });
         }
       )
-  }, [ids]);
+  }, [isCompleted]);
 
-  return [ response, setIds ];
-}
-
-export const useMarkAsComplete = () => {
-  const [ ids, setIds ] = useState(null);
-  const [ response, setResponse ] = useState(null);
-
-  useEffect(() => {
-    if(!ids) return;
-
-    setResponse({ pending: true, completed: false, error: null, data: null });
-
-    Axios.post(`http://localhost:11223/todo/mark-as-complete`, { ids })
-      .then(
-        (resp: AxiosResponse) => {
-          setResponse({ pending: false, completed: true, error: null, data: resp.data });
-        },
-        (error: AxiosError) => {
-          setResponse({ pending: false, completed: true, error: error.message, data: null });
-        }
-      )
-  }, [ids]);
-
-  return [ response, setIds ];
+  return [ response, setIsCompleted ];
 }
 
 export const useClearCompleted = () => {

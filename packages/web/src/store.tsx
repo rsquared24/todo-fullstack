@@ -5,6 +5,7 @@ export enum AppAction {
   AddTodo,
   UpdateTodo,
   RemoveTodo,
+  ApplyFilter,
   ClearComplete,
   MarkAsComplete,
   MarkAsIncomplete
@@ -19,10 +20,8 @@ export interface AppReducerAction {
 }
 
 export interface AppState {
-  isLoading?: boolean,
   todos?: Array<any>,
-  filter?: string,
-  filteredTodos?: Array<any>,
+  filter?: string
 }
 
 export const appReducer = (state: any, action: AppReducerAction) => {
@@ -30,7 +29,6 @@ export const appReducer = (state: any, action: AppReducerAction) => {
     case AppAction.RequestTodosSuccess:
       return {
         ...state,
-        isLoading: false,
         todos: action.response
       };
     case AppAction.AddTodo:
@@ -47,11 +45,15 @@ export const appReducer = (state: any, action: AppReducerAction) => {
       let remainingTodos = [...state.todos];
       let idx = remainingTodos.findIndex((todo) => todo.id === action.todo.id);
       remainingTodos.splice(idx, 1);
-
       return {
         ...state,
         todos: remainingTodos
       };
+    case AppAction.ApplyFilter: 
+      return {
+        ...state,
+        filter: action.filter
+      }
     case AppAction.ClearComplete: 
       return {
         ...state,

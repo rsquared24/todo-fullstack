@@ -14,14 +14,21 @@ const useRemainingCount = (todos: any) => {
   return remainingCount;
 }
 
-interface FooterComponentProps {
-  onFilterClick(filter?: string): void;
+const useAnyCompleted = (todos: any) => {
+  const [ anyCompleted, setAnyCompleted ] = useState(null);
+
+  useEffect(() => {
+    setAnyCompleted(todos.filter((todo: any) => todo.done === true).length >= 1);
+  }, [todos])
+
+  return anyCompleted;
 }
 
-export const FooterComponent = (props: FooterComponentProps) => {
+export const FooterComponent = () => {
   const [ appState, appDispatch ] = useContext(AppContext);
   const [ clearCompletedResponse, setIds ] = useClearCompleted();
   const remainingCount = useRemainingCount(appState.todos);
+  const anyCompleted = useAnyCompleted(appState.todos);
   
   useEffect(() => {
     if(!clearCompletedResponse || clearCompletedResponse.pending) return;
@@ -37,22 +44,39 @@ export const FooterComponent = (props: FooterComponentProps) => {
     let ids = appState.todos.filter((todo: any) => todo.done === true).map((todo: any) => todo.id);
     setIds(ids);
   }
-
+  
   return (
     <footer className="footer">
-      <span className="todo-count"> {`${remainingCount} ${remainingCount === 0 ? "item" : "items"} left`} </span>
+      <span className="todo-count"> 
+        {`${remainingCount} ${remainingCount === 1 ? "item" : "items"} left`} 
+      </span>
       <ul className="filters">
         <li> 
-          <a href="#" onClick={() => { props.onFilterClick(null) }}> All </a> 
+          <a href="#"
+             onClick={() => { appDispatch({ type: AppAction.ApplyFilter, filter: null }) }}> 
+            All 
+          </a> 
         </li>
         <li> 
-        <a href="#/active" onClick={() => { props.onFilterClick("active") }}> Active </a> 
+          <a href="#/active" 
+            onClick={() => { appDispatch({ type: AppAction.ApplyFilter, filter: "active" }) }}> 
+            Active 
+          </a> 
         </li>
         <li>
-          <a href="#/completed" onClick={() => { props.onFilterClick("completed") }}> Completed  </a> 
+          <a href="#/completed" 
+             onClick={() => { appDispatch({ type: AppAction.ApplyFilter, filter: "completed" }) }}> 
+            Completed  
+          </a> 
         </li>
       </ul>
-      <button className="clear-completed" onClick={handleClearCompletedClick}> Clear completed </button>
+      {anyCompleted && 
+        <button 
+          className="clear-completed" 
+          onClick={handleClearCompletedClick}> 
+          Clear completed 
+        </button>
+      }
     </footer>
   )
 }
