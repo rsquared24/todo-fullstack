@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
-import Axios, { AxiosResponse, AxiosError } from "axios";
 import classNames from "classnames";
-import { AppContext, AppAction } from "./context";
+import { AppContext, AppAction } from "./store";
+import { useSaveTodo, useDeleteTodo } from "./api";
 
 export interface TodoItemComponentProps { 
   todo: any
@@ -10,17 +10,42 @@ export interface TodoItemComponentProps {
 export const TodoItemComponent = (props: TodoItemComponentProps) => {
   if(!props.todo) return null;
 
+  const [ appState, appDispatch ] = useContext(AppContext); 
   const [ description, setDescription ] = useState(props.todo.description);
   const [ isEditing, setIsEditing ] = useState(false);
-  const [ appState, appDispatch ] = useContext(AppContext);
+  const [ saveTodoResponse, setTodo ] = useSaveTodo()
+  const [ deleteTodoResponse, setDeleteTodoId ] = useDeleteTodo();
   const editTb = useRef(null);
 
-  const handleListItemDoubleClick = (e: any) => {
+  useEffect(() => {
+    if(!isEditing) return;
+
+    editTb.current.focus();
+  }, [isEditing])
+
+  useEffect(() => { 
+    if(!saveTodoResponse || saveTodoResponse.pending) return;
+
+    if(saveTodoResponse.completed && saveTodoResponse.data) {
+      appDispatch({ type: AppAction.UpdateTodo, todo: saveTodoResponse.data });
+      setIsEditing(false)
+    }
+  }, [saveTodoResponse])
+
+  useEffect(() => {
+    if(!deleteTodoResponse || deleteTodoResponse.pending) return;
+
+    if(deleteTodoResponse.completed && deleteTodoResponse.data) {
+      appDispatch({ type: AppAction.RemoveTodo, todo: props.todo });
+    }
+  }, [deleteTodoResponse])
+
+  const handleListItemDoubleClick = (e: React.MouseEvent<HTMLLIElement>) => {
     setDescription(props.todo.description);
     setIsEditing(true);
   }
 
-  const handleTextboxChange = (e: any) => {
+  const handleTextboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(e.currentTarget.value);
   }
 
@@ -33,61 +58,19 @@ export const TodoItemComponent = (props: TodoItemComponentProps) => {
     }
   }
 
-  const handleCheckboxChange = (e: any) => {  
-    updateTodo({ ...props.todo, done: e.currentTarget.checked });
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {  
+    setTodo({...props.todo, done: e.currentTarget.checked });
   }
 
   const handleDeleteClick = () => {
-    deleteTodo(props.todo.id);
+    setDeleteTodoId(props.todo.id);
   }
 
   const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(!description) {
-      deleteTodo(props.todo.id);
-    }
-    else {
-      updateTodo({ ...props.todo, description });
-    }
+    (description) ?
+      setTodo({...props.todo, description: description }) :
+      setDeleteTodoId(props.todo.id);
   }
-  
-  const updateTodo = (todo: any) => {
-    Axios.post(`http://localhost:11223/todo/${props.todo.id}`, { ...props.todo, ...todo })
-      .then(
-        (response: AxiosResponse) => {
-          appDispatch({ type: AppAction.UpdateTodo, todo: { ...props.todo, ...response.data }});
-        },
-        (error: AxiosError) => {
-          console.log(error);
-        },
-      )
-      .finally(() => {
-        if(!isEditing) return;
-        setIsEditing(false);
-      });
-  }
-
-  const deleteTodo = (id: string) => {
-    let deleted: boolean = false;
-    Axios.delete(`http://localhost:11223/todo/${id}`)
-      .then(
-        (response: AxiosResponse) => {
-          appDispatch({ type: AppAction.RemoveTodo, todo: props.todo });
-          deleted = response.data;
-        },
-        (error: AxiosError) => {
-          console.log(error);
-        }
-      )
-      .finally(() => {
-        // we check this because if has been deleted, we unmount the component and there is no state to set
-        if(deleted) return;
-        setIsEditing(false);
-      });
-  }
-
-  useEffect(() => {
-    if(isEditing) editTb.current.focus();
-  }, [isEditing])
 
   return (
     <li 

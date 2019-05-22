@@ -1,30 +1,25 @@
-import React, { useContext } from "react";
-import Axios, { AxiosResponse, AxiosError } from "axios";
-import { AppContext, AppAction } from "./context";
+import React, { useContext, useEffect } from "react";
+import { AppContext, AppAction } from "./store";
+import { useSaveTodo } from "./api";
 
-interface HeaderComponentProps {
-}
+export const HeaderComponent = () => {
+  const [ appState, appDispatch ] = useContext(AppContext);
+  const [ saveTodoResponse, setTodo ] = useSaveTodo();
 
-export const HeaderComponent = (props: HeaderComponentProps) => {
-  const [appState, appDispatch] = useContext(AppContext);
+  useEffect(() => { 
+    if(!saveTodoResponse || saveTodoResponse.pending) return;
+
+    if(saveTodoResponse.completed && saveTodoResponse.data) {
+      appDispatch({ type: AppAction.AddTodo, todo: saveTodoResponse.data });
+    }
+  }, [saveTodoResponse])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     let description = e.currentTarget.value;
     if(e.keyCode !== 13 || !description) return;
 
-    insertTodo({ description, done: false });
+    setTodo({ description, done: false });
     e.currentTarget.value = null;
-  }
-  
-  const insertTodo = (todo: any): void => {
-    Axios.post("http://localhost:11223/todo", todo).then(
-      (response: AxiosResponse) => {
-        appDispatch({ type: AppAction.AddTodo, todo: response.data });
-      }, 
-      (error: AxiosError): void => {
-        console.log(error);
-      }
-    );
   }
 
   return (
